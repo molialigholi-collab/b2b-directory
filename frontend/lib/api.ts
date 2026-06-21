@@ -13,6 +13,8 @@ export type Company = {
 export type Product = {
   id: number;
   company: number;
+  company_name: string;
+  company_slug: string;
   name: string;
   description: string;
   image: string | null;
@@ -67,6 +69,10 @@ export function getCompany(slug: string) {
 
 export function getProducts() {
   return fetchList<Product>("/products/");
+}
+
+export function getProduct(id: string) {
+  return fetchJson<Product>(`/products/${id}/`);
 }
 
 export function getArticles() {
