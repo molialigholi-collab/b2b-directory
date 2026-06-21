@@ -5,11 +5,13 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from articles.views import ArticleViewSet
+from categories.views import CategoryViewSet
 from companies.views import CompanyViewSet
 from events.views import EventViewSet
 from products.views import ProductViewSet
 
 router = DefaultRouter()
+router.register(r"categories", CategoryViewSet)
 router.register(r"companies", CompanyViewSet)
 router.register(r"products", ProductViewSet)
 router.register(r"articles", ArticleViewSet)

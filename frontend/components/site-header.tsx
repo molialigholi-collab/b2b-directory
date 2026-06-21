@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 const navItems = [
+  { href: "/categories", label: "Categories" },
   { href: "/companies", label: "Companies" },
   { href: "/products", label: "Products" },
   { href: "/articles", label: "Articles" },

@@ -1,12 +1,16 @@
 type SearchFormProps = {
   action: string;
   defaultValue?: string;
+  hiddenFields?: Record<string, string | undefined>;
   placeholder: string;
 };
 
-export function SearchForm({ action, defaultValue = "", placeholder }: SearchFormProps) {
+export function SearchForm({ action, defaultValue = "", hiddenFields = {}, placeholder }: SearchFormProps) {
   return (
     <form action={action} className="mb-6 flex flex-col gap-3 border border-line bg-white p-4 shadow-panel sm:flex-row">
+      {Object.entries(hiddenFields).map(([name, value]) =>
+        value ? <input key={name} type="hidden" name={name} value={value} /> : null,
+      )}
       <input
         type="search"
         name="search"

@@ -1,7 +1,10 @@
-﻿from django.db import models
+from django.db import models
+
+from categories.models import Category
 
 
 class Company(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="companies", blank=True, null=True)
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField(blank=True)

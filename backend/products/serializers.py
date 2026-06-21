@@ -6,6 +6,8 @@ from .models import Product
 class ProductSerializer(serializers.ModelSerializer):
     company_name = serializers.CharField(source="company.name", read_only=True)
     company_slug = serializers.SlugField(source="company.slug", read_only=True)
+    category_name = serializers.CharField(source="category.name", read_only=True)
+    category_slug = serializers.SlugField(source="category.slug", read_only=True)
 
     class Meta:
         model = Product
@@ -14,6 +16,9 @@ class ProductSerializer(serializers.ModelSerializer):
             "company",
             "company_name",
             "company_slug",
+            "category",
+            "category_name",
+            "category_slug",
             "name",
             "description",
             "image",
