@@ -42,19 +42,27 @@ type ApiList<T> = T[] | { results: T[] };
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000/api";
 
-async function fetchList<T>(path: string): Promise<T[]> {
+async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, { cache: "no-store" });
 
   if (!response.ok) {
     throw new Error(`Failed to fetch ${path}: ${response.status} ${response.statusText}`);
   }
 
-  const payload = (await response.json()) as ApiList<T>;
+  return response.json() as Promise<T>;
+}
+
+async function fetchList<T>(path: string): Promise<T[]> {
+  const payload = await fetchJson<ApiList<T>>(path);
   return Array.isArray(payload) ? payload : payload.results;
 }
 
 export function getCompanies() {
   return fetchList<Company>("/companies/");
+}
+
+export function getCompany(slug: string) {
+  return fetchJson<Company>(`/companies/${slug}/`);
 }
 
 export function getProducts() {
