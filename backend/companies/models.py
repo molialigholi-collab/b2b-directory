@@ -1,9 +1,11 @@
 from django.db import models
+from django.conf import settings
 
 from categories.models import Category
 
 
 class Company(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name="owned_companies", blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name="companies", blank=True, null=True)
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)

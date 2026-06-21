@@ -20,6 +20,7 @@ router.register(r"events", EventViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/auth/", include("users.urls")),
     path("api/inquiries/", InquiryCreateView.as_view(), name="inquiry-create"),
     path("api/", include(router.urls)),
 ]
