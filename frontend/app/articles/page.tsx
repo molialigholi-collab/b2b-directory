@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { EmptyState } from "@/components/empty-state";
 import { PageIntro } from "@/components/page-intro";
 import { getArticles } from "@/lib/api";
@@ -14,9 +15,24 @@ export default async function ArticlesPage() {
         <div className="space-y-4">
           {articles.map((article) => (
             <article key={article.id} className="border border-line bg-white p-5 shadow-panel">
-              <p className="text-xs font-semibold uppercase tracking-normal text-berry">Company #{article.company}</p>
-              <h2 className="mt-2 text-xl font-semibold text-ink">{article.title}</h2>
+              <p className="text-xs font-semibold uppercase tracking-normal text-berry">
+                {article.company_name || `Company #${article.company}`}
+              </p>
+              <h2 className="mt-2 text-xl font-semibold text-ink">
+                {article.slug ? (
+                  <Link href={`/articles/${article.slug}`} className="transition hover:text-berry">
+                    {article.title}
+                  </Link>
+                ) : (
+                  article.title
+                )}
+              </h2>
               <p className="mt-3 line-clamp-4 text-sm leading-6 text-ink/70">{article.content}</p>
+              {article.slug ? (
+                <Link href={`/articles/${article.slug}`} className="mt-5 inline-flex text-sm font-semibold text-berry transition hover:text-ink">
+                  Read article
+                </Link>
+              ) : null}
             </article>
           ))}
         </div>

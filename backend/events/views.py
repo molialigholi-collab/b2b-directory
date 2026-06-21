@@ -7,3 +7,4 @@ from .serializers import EventSerializer
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.select_related("company")
     serializer_class = EventSerializer
+    lookup_field = "slug"

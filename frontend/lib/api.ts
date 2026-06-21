@@ -30,7 +30,10 @@ export type Product = {
 export type Article = {
   id: number;
   company: number;
+  company_name: string;
+  company_slug: string;
   title: string;
+  slug: string | null;
   content: string;
   image: string | null;
   created_at: string;
@@ -39,7 +42,10 @@ export type Article = {
 export type Event = {
   id: number;
   company: number;
+  company_name: string;
+  company_slug: string;
   title: string;
+  slug: string | null;
   description: string;
   event_date: string;
   location: string;
@@ -124,6 +130,14 @@ export function getArticles() {
   return fetchList<Article>("/articles/");
 }
 
+export function getArticle(slug: string) {
+  return fetchJson<Article>(`/articles/${slug}/`);
+}
+
 export function getEvents() {
   return fetchList<Event>("/events/");
+}
+
+export function getEvent(slug: string) {
+  return fetchJson<Event>(`/events/${slug}/`);
 }
