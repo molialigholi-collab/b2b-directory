@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import RFQ
+from .models import RFQ, RFQResponse
 
 
 @admin.register(RFQ)
@@ -24,4 +24,20 @@ class RFQAdmin(admin.ModelAdmin):
     def mark_as_closed(self, request, queryset):
         queryset.update(status=RFQ.Status.CLOSED)
 
-# Register your models here.
+
+@admin.register(RFQResponse)
+class RFQResponseAdmin(admin.ModelAdmin):
+    list_display = ("rfq", "supplier", "user", "status", "proposed_price", "currency", "created_at")
+    list_filter = ("status", "created_at", "supplier", "rfq")
+    search_fields = ("rfq__title", "supplier__name", "user__username", "message")
+    readonly_fields = ("created_at",)
+    ordering = ("-created_at",)
+    actions = ("mark_as_shortlisted", "mark_as_rejected")
+
+    @admin.action(description="Mark selected responses as shortlisted")
+    def mark_as_shortlisted(self, request, queryset):
+        queryset.update(status=RFQResponse.Status.SHORTLISTED)
+
+    @admin.action(description="Mark selected responses as rejected")
+    def mark_as_rejected(self, request, queryset):
+        queryset.update(status=RFQResponse.Status.REJECTED)

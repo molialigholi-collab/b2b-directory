@@ -37,7 +37,7 @@ export default function DashboardPage() {
         <h1 className="mt-3 text-3xl font-bold tracking-normal text-ink sm:text-4xl">Dashboard</h1>
         <p className="mt-4 text-sm leading-6 text-ink/65">Signed in as {user.username}. Manage your company profile and product listings.</p>
       </section>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-3">
         <Link href="/dashboard/company" className="border border-line bg-white p-6 shadow-panel transition hover:border-teal">
           <h2 className="text-xl font-semibold text-ink">Company Profile</h2>
           <p className="mt-3 text-sm leading-6 text-ink/65">Update public business information for your owned company.</p>
@@ -45,6 +45,10 @@ export default function DashboardPage() {
         <Link href="/dashboard/products" className="border border-line bg-white p-6 shadow-panel transition hover:border-saffron">
           <h2 className="text-xl font-semibold text-ink">Products</h2>
           <p className="mt-3 text-sm leading-6 text-ink/65">List, add, edit, and remove basic product records.</p>
+        </Link>
+        <Link href="/dashboard/rfq-responses" className="border border-line bg-white p-6 shadow-panel transition hover:border-teal">
+          <h2 className="text-xl font-semibold text-ink">RFQ Responses</h2>
+          <p className="mt-3 text-sm leading-6 text-ink/65">Track responses submitted by your company.</p>
         </Link>
       </div>
     </div>

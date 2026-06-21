@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 
 from companies.models import Company
 from products.models import Product
+from rfqs.models import RFQResponse
+from rfqs.serializers import DashboardRFQResponseSerializer
 
 from .serializers import DashboardCompanySerializer, DashboardProductSerializer
 
@@ -105,3 +107,35 @@ class MyProductDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+
+
+class MyRFQResponseListView(generics.ListAPIView):
+    serializer_class = DashboardRFQResponseSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_company(self):
+        return get_owned_company(self.request.user)
+
+    def get_queryset(self):
+        company = self.get_company()
+
+        if not company:
+            return RFQResponse.objects.none()
+
+        return RFQResponse.objects.filter(supplier=company).select_related("rfq", "supplier")
+
+    def list(self, request, *args, **kwargs):
+        company = self.get_company()
+
+        if not company:
+            return Response({
+                "company": None,
+                "responses": [],
+                "detail": "No company is assigned to this account yet.",
+            })
+
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            "company": DashboardCompanySerializer(company).data,
+            "responses": serializer.data,
+        })

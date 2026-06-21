@@ -1,6 +1,6 @@
 "use client";
 
-import { Company, Product } from "@/lib/api";
+import { Company, Product, RFQ } from "@/lib/api";
 import { getAccessToken, logout } from "@/lib/auth";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000/api";
@@ -13,6 +13,34 @@ export type MyCompanyResponse = {
 export type MyProductsResponse = {
   company: Company | null;
   products: Product[];
+  detail?: string;
+};
+
+export type RFQResponsePayload = {
+  message: string;
+  proposed_price?: string;
+  currency?: string;
+  delivery_time?: string;
+};
+
+export type RFQResponse = {
+  id: number;
+  rfq: number;
+  rfq_title: string;
+  rfq_status: RFQ["status"];
+  supplier: number;
+  supplier_name: string;
+  message: string;
+  proposed_price: string | null;
+  currency: string;
+  delivery_time: string;
+  status: "submitted" | "shortlisted" | "rejected";
+  created_at: string;
+};
+
+export type MyRFQResponsesResponse = {
+  company: Company | null;
+  responses: RFQResponse[];
   detail?: string;
 };
 
@@ -79,4 +107,15 @@ export function deleteMyProduct(id: number) {
   return dashboardRequest<unknown>(`/dashboard/my-products/${id}/`, {
     method: "DELETE",
   });
+}
+
+export function respondToRFQ(id: number, payload: RFQResponsePayload) {
+  return dashboardRequest<RFQResponse>(`/rfqs/${id}/respond/`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function getMyRFQResponses() {
+  return dashboardRequest<MyRFQResponsesResponse>("/dashboard/rfq-responses/");
 }

@@ -10,7 +10,7 @@ from companies.views import CompanyViewSet
 from events.views import EventViewSet
 from inquiries.views import InquiryCreateView
 from products.views import ProductViewSet
-from rfqs.views import RFQListCreateView
+from rfqs.views import RFQListCreateView, RFQRespondView
 
 router = DefaultRouter()
 router.register(r"categories", CategoryViewSet)
@@ -25,6 +25,7 @@ urlpatterns = [
     path("api/dashboard/", include("dashboard.urls")),
     path("api/inquiries/", InquiryCreateView.as_view(), name="inquiry-create"),
     path("api/rfqs/", RFQListCreateView.as_view(), name="rfq-list-create"),
+    path("api/rfqs/<int:pk>/respond/", RFQRespondView.as_view(), name="rfq-respond"),
     path("api/", include(router.urls)),
 ]
 
