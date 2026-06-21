@@ -1,16 +1,27 @@
 import Link from "next/link";
 import { EmptyState } from "@/components/empty-state";
 import { PageIntro } from "@/components/page-intro";
+import { SearchForm } from "@/components/search-form";
 import { getProducts } from "@/lib/api";
 
-export default async function ProductsPage() {
-  const products = await getProducts();
+type ProductsPageProps = {
+  searchParams: Promise<{ search?: string }>;
+};
+
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const { search = "" } = await searchParams;
+  const query = search.trim();
+  const products = await getProducts(query);
 
   return (
     <div>
       <PageIntro eyebrow="Products" title="Product catalog" description="Review products connected to company records through the Django products endpoint." />
+      <SearchForm action="/products" defaultValue={query} placeholder="Search products by name, description, or company" />
       {products.length === 0 ? (
-        <EmptyState title="No products yet" message="Create products in Django admin and refresh this page." />
+        <EmptyState
+          title={query ? "No products found" : "No products yet"}
+          message={query ? "Try a different product search keyword." : "Create products in Django admin and refresh this page."}
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (

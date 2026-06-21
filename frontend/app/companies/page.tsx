@@ -1,16 +1,27 @@
 import Link from "next/link";
 import { EmptyState } from "@/components/empty-state";
 import { PageIntro } from "@/components/page-intro";
+import { SearchForm } from "@/components/search-form";
 import { getCompanies } from "@/lib/api";
 
-export default async function CompaniesPage() {
-  const companies = await getCompanies();
+type CompaniesPageProps = {
+  searchParams: Promise<{ search?: string }>;
+};
+
+export default async function CompaniesPage({ searchParams }: CompaniesPageProps) {
+  const { search = "" } = await searchParams;
+  const query = search.trim();
+  const companies = await getCompanies(query);
 
   return (
     <div>
       <PageIntro eyebrow="Companies" title="Company directory" description="Explore supplier and partner profiles from the Django companies endpoint." />
+      <SearchForm action="/companies" defaultValue={query} placeholder="Search companies by name, description, email, or website" />
       {companies.length === 0 ? (
-        <EmptyState title="No companies yet" message="Add companies in Django admin and they will appear here automatically." />
+        <EmptyState
+          title={query ? "No companies found" : "No companies yet"}
+          message={query ? "Try a different company search keyword." : "Add companies in Django admin and they will appear here automatically."}
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {companies.map((company) => (

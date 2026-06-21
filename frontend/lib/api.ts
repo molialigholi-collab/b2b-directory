@@ -44,6 +44,15 @@ type ApiList<T> = T[] | { results: T[] };
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000/api";
 
+function withSearch(path: string, search?: string) {
+  if (!search) {
+    return path;
+  }
+
+  const params = new URLSearchParams({ search });
+  return `${path}?${params.toString()}`;
+}
+
 async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, { cache: "no-store" });
 
@@ -59,16 +68,16 @@ async function fetchList<T>(path: string): Promise<T[]> {
   return Array.isArray(payload) ? payload : payload.results;
 }
 
-export function getCompanies() {
-  return fetchList<Company>("/companies/");
+export function getCompanies(search?: string) {
+  return fetchList<Company>(withSearch("/companies/", search));
 }
 
 export function getCompany(slug: string) {
   return fetchJson<Company>(`/companies/${slug}/`);
 }
 
-export function getProducts() {
-  return fetchList<Product>("/products/");
+export function getProducts(search?: string) {
+  return fetchList<Product>(withSearch("/products/", search));
 }
 
 export function getProduct(id: string) {
