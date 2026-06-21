@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "articles",
     "events",
     "inquiries",
+    "rfqs",
 ]
 
 MIDDLEWARE = [

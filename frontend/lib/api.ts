@@ -70,6 +70,34 @@ export type InquiryPayload = {
   source_page: string;
 };
 
+export type RFQ = {
+  id: number;
+  title: string;
+  description: string;
+  category: number | null;
+  category_name: string | null;
+  category_slug: string | null;
+  quantity: number;
+  unit: string;
+  destination_country: string;
+  destination_city: string;
+  status: "reviewed" | "matched";
+  created_at: string;
+};
+
+export type RFQPayload = {
+  title: string;
+  description: string;
+  category?: number | null;
+  quantity: number;
+  unit: string;
+  destination_country: string;
+  destination_city: string;
+  buyer_name: string;
+  buyer_email: string;
+  buyer_phone: string;
+};
+
 type ApiList<T> = T[] | { results: T[] };
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000/api";
@@ -124,6 +152,23 @@ export async function createInquiry(payload: InquiryPayload) {
   return response.json();
 }
 
+export async function createRFQ(payload: RFQPayload) {
+  const response = await fetch(`${API_BASE_URL}/rfqs/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail || "Unable to submit RFQ. Please check the form and try again.");
+  }
+
+  return response.json();
+}
+
 async function fetchList<T>(path: string): Promise<T[]> {
   const payload = await fetchJson<ApiList<T>>(path);
   return Array.isArray(payload) ? payload : payload.results;
@@ -131,6 +176,10 @@ async function fetchList<T>(path: string): Promise<T[]> {
 
 export function getCategories() {
   return fetchList<Category>("/categories/");
+}
+
+export function getRFQs() {
+  return fetchList<RFQ>("/rfqs/");
 }
 
 export function getCategory(slug: string) {
