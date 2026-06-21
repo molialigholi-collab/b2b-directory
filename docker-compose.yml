@@ -1,0 +1,16 @@
+﻿services:
+  db:
+    image: postgres:16
+    container_name: b2b_directory_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: b2b_directory
+      POSTGRES_USER: b2b_user
+      POSTGRES_PASSWORD: b2b_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
