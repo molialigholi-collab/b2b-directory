@@ -1,5 +1,15 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getArticles, getCategories, getCompanies, getEvents, getProducts } from "@/lib/api";
+import { absoluteUrl } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "B2B Directory Platform",
+  description: "Discover companies, products, articles, and events in one integrated industrial directory.",
+  alternates: {
+    canonical: absoluteUrl("/"),
+  },
+};
 
 function latestByCreatedAt<T extends { created_at: string }>(items: T[]) {
   return [...items].sort((first, second) => Date.parse(second.created_at) - Date.parse(first.created_at)).slice(0, 4);

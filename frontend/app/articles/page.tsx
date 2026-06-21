@@ -1,7 +1,17 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { EmptyState } from "@/components/empty-state";
 import { PageIntro } from "@/components/page-intro";
 import { getArticles } from "@/lib/api";
+import { absoluteUrl } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Articles",
+  description: "Read industry articles published by companies in the B2B Directory Platform.",
+  alternates: {
+    canonical: absoluteUrl("/articles"),
+  },
+};
 
 export default async function ArticlesPage() {
   const articles = await getArticles();

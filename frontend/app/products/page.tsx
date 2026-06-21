@@ -1,8 +1,18 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { EmptyState } from "@/components/empty-state";
 import { PageIntro } from "@/components/page-intro";
 import { SearchForm } from "@/components/search-form";
 import { getCategories, getProducts } from "@/lib/api";
+import { absoluteUrl } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Products",
+  description: "Explore product listings connected to verified company profiles and category filters.",
+  alternates: {
+    canonical: absoluteUrl("/products"),
+  },
+};
 
 type ProductsPageProps = {
   searchParams: Promise<{ category?: string; search?: string }>;

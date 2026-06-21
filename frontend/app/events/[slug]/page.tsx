@@ -1,6 +1,8 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getEvent, getEvents } from "@/lib/api";
+import { absoluteUrl, pageDescription } from "@/lib/seo";
 
 type EventDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -14,6 +16,32 @@ const dateFormatter = new Intl.DateTimeFormat("en", {
 export async function generateStaticParams() {
   const events = await getEvents();
   return events.filter((event) => event.slug).map((event) => ({ slug: event.slug as string }));
+}
+
+export async function generateMetadata({ params }: EventDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const event = await getEvent(slug).catch(() => null);
+
+  if (!event) {
+    return {
+      title: "Event Not Found",
+    };
+  }
+
+  const description = pageDescription(event.description || `${event.title} in ${event.location}`);
+
+  return {
+    title: event.title,
+    description,
+    alternates: {
+      canonical: absoluteUrl(`/events/${slug}`),
+    },
+    openGraph: {
+      title: event.title,
+      description,
+      url: absoluteUrl(`/events/${slug}`),
+    },
+  };
 }
 
 export default async function EventDetailPage({ params }: EventDetailPageProps) {

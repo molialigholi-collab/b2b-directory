@@ -1,7 +1,17 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { EmptyState } from "@/components/empty-state";
 import { PageIntro } from "@/components/page-intro";
 import { getEvents } from "@/lib/api";
+import { absoluteUrl } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Events",
+  description: "Track upcoming business events and company activities in the B2B Directory Platform.",
+  alternates: {
+    canonical: absoluteUrl("/events"),
+  },
+};
 
 const dateFormatter = new Intl.DateTimeFormat("en", {
   dateStyle: "medium",

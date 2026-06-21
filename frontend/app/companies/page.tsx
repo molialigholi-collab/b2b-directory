@@ -1,8 +1,18 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { EmptyState } from "@/components/empty-state";
 import { PageIntro } from "@/components/page-intro";
 import { SearchForm } from "@/components/search-form";
 import { getCategories, getCompanies } from "@/lib/api";
+import { absoluteUrl } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Companies",
+  description: "Browse company profiles, contact details, websites, and category filters in the B2B Directory Platform.",
+  alternates: {
+    canonical: absoluteUrl("/companies"),
+  },
+};
 
 type CompaniesPageProps = {
   searchParams: Promise<{ category?: string; search?: string }>;

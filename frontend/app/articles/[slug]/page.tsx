@@ -1,6 +1,8 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getArticle, getArticles } from "@/lib/api";
+import { absoluteUrl, pageDescription } from "@/lib/seo";
 
 type ArticleDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -13,6 +15,34 @@ const dateFormatter = new Intl.DateTimeFormat("en", {
 export async function generateStaticParams() {
   const articles = await getArticles();
   return articles.filter((article) => article.slug).map((article) => ({ slug: article.slug as string }));
+}
+
+export async function generateMetadata({ params }: ArticleDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getArticle(slug).catch(() => null);
+
+  if (!article) {
+    return {
+      title: "Article Not Found",
+    };
+  }
+
+  const description = pageDescription(article.content.slice(0, 160));
+
+  return {
+    title: article.title,
+    description,
+    alternates: {
+      canonical: absoluteUrl(`/articles/${slug}`),
+    },
+    openGraph: {
+      title: article.title,
+      description,
+      url: absoluteUrl(`/articles/${slug}`),
+      images: article.image ? [article.image] : undefined,
+      type: "article",
+    },
+  };
 }
 
 export default async function ArticleDetailPage({ params }: ArticleDetailPageProps) {

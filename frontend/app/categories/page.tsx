@@ -1,7 +1,17 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { EmptyState } from "@/components/empty-state";
 import { PageIntro } from "@/components/page-intro";
 import { getCategories } from "@/lib/api";
+import { absoluteUrl } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Categories",
+  description: "Browse category filters for companies and products in the B2B Directory Platform.",
+  alternates: {
+    canonical: absoluteUrl("/categories"),
+  },
+};
 
 export default async function CategoriesPage() {
   const categories = await getCategories();

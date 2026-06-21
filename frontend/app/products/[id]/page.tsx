@@ -1,6 +1,8 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProduct, getProducts } from "@/lib/api";
+import { absoluteUrl, pageDescription } from "@/lib/seo";
 
 type ProductDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -9,6 +11,33 @@ type ProductDetailPageProps = {
 export async function generateStaticParams() {
   const products = await getProducts();
   return products.map((product) => ({ id: String(product.id) }));
+}
+
+export async function generateMetadata({ params }: ProductDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProduct(id).catch(() => null);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+
+  const description = pageDescription(product.description);
+
+  return {
+    title: product.name,
+    description,
+    alternates: {
+      canonical: absoluteUrl(`/products/${product.id}`),
+    },
+    openGraph: {
+      title: product.name,
+      description,
+      url: absoluteUrl(`/products/${product.id}`),
+      images: product.image ? [product.image] : undefined,
+    },
+  };
 }
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {

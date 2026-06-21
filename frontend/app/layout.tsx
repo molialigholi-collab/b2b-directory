@@ -1,10 +1,30 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
+import { absoluteUrl, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "B2B Directory",
-  description: "A full-stack B2B directory connected to a Django REST API.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "B2B Directory Platform",
+    template: "%s | B2B Directory Platform",
+  },
+  description: "Discover companies, products, articles, and events in one integrated industrial directory.",
+  alternates: {
+    canonical: absoluteUrl("/"),
+  },
+  openGraph: {
+    title: "B2B Directory Platform",
+    description: "Discover companies, products, articles, and events in one integrated industrial directory.",
+    siteName: "B2B Directory Platform",
+    type: "website",
+    url: absoluteUrl("/"),
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "B2B Directory Platform",
+    description: "Discover companies, products, articles, and events in one integrated industrial directory.",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

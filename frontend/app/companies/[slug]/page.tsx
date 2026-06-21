@@ -1,6 +1,8 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getCompany, getCompanies } from "@/lib/api";
+import { absoluteUrl, pageDescription } from "@/lib/seo";
 
 type CompanyDetailPageProps = {
   params: Promise<{ slug: string }>;
@@ -9,6 +11,33 @@ type CompanyDetailPageProps = {
 export async function generateStaticParams() {
   const companies = await getCompanies();
   return companies.map((company) => ({ slug: company.slug }));
+}
+
+export async function generateMetadata({ params }: CompanyDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const company = await getCompany(slug).catch(() => null);
+
+  if (!company) {
+    return {
+      title: "Company Not Found",
+    };
+  }
+
+  const description = pageDescription(company.description);
+
+  return {
+    title: company.name,
+    description,
+    alternates: {
+      canonical: absoluteUrl(`/companies/${company.slug}`),
+    },
+    openGraph: {
+      title: company.name,
+      description,
+      url: absoluteUrl(`/companies/${company.slug}`),
+      images: company.logo ? [company.logo] : undefined,
+    },
+  };
 }
 
 export default async function CompanyDetailPage({ params }: CompanyDetailPageProps) {
