@@ -7,5 +7,6 @@ from .models import Company
 class CompanyAdmin(admin.ModelAdmin):
     list_display = ("name", "category", "email", "website", "created_at")
     prepopulated_fields = {"slug": ("name",)}
-    search_fields = ("name", "email")
-    list_filter = ("category",)
+    search_fields = ("name", "description", "email", "website")
+    list_filter = ("category", "created_at")
+    ordering = ("name",)

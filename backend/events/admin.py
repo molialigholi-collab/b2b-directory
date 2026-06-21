@@ -7,5 +7,6 @@ from .models import Event
 class EventAdmin(admin.ModelAdmin):
     list_display = ("title", "company", "event_date", "location", "created_at")
     prepopulated_fields = {"slug": ("title",)}
-    search_fields = ("title", "company__name", "location")
-    list_filter = ("company", "event_date")
+    search_fields = ("title", "description", "company__name", "location")
+    list_filter = ("company", "event_date", "created_at")
+    ordering = ("event_date",)

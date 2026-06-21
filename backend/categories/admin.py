@@ -8,5 +8,5 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "slug", "created_at")
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ("name", "description")
-
-# Register your models here.
+    list_filter = ("created_at",)
+    ordering = ("name",)
