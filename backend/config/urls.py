@@ -8,6 +8,7 @@ from articles.views import ArticleViewSet
 from categories.views import CategoryViewSet
 from companies.views import CompanyViewSet
 from events.views import EventViewSet
+from inquiries.views import InquiryCreateView
 from products.views import ProductViewSet
 
 router = DefaultRouter()
@@ -19,6 +20,7 @@ router.register(r"events", EventViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/inquiries/", InquiryCreateView.as_view(), name="inquiry-create"),
     path("api/", include(router.urls)),
 ]
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { InquiryForm } from "@/components/inquiry-form";
 import { getCompany, getCompanies } from "@/lib/api";
 import { absoluteUrl, pageDescription } from "@/lib/seo";
 
@@ -95,6 +96,8 @@ export default async function CompanyDetailPage({ params }: CompanyDetailPagePro
           )}
         </div>
       </section>
+
+      <InquiryForm companyId={company.id} sourcePage={`/companies/${company.slug}`} title={`Contact ${company.name}`} />
     </div>
   );
 }

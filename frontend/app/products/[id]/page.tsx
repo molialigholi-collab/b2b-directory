@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { InquiryForm } from "@/components/inquiry-form";
 import { getProduct, getProducts } from "@/lib/api";
 import { absoluteUrl, pageDescription } from "@/lib/seo";
 
@@ -79,6 +80,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           <p className="mt-3 text-sm text-ink/65">{product.company_name || `Company #${product.company}`}</p>
         )}
       </section>
+
+      <InquiryForm companyId={product.company} productId={product.id} sourcePage={`/products/${product.id}`} title={`Inquire about ${product.name}`} />
     </div>
   );
 }

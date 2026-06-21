@@ -60,6 +60,16 @@ export type Category = {
   created_at: string;
 };
 
+export type InquiryPayload = {
+  company?: number;
+  product?: number;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  source_page: string;
+};
+
 type ApiList<T> = T[] | { results: T[] };
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000/api";
@@ -95,6 +105,23 @@ async function fetchJson<T>(path: string): Promise<T> {
   }
 
   return response.json() as Promise<T>;
+}
+
+export async function createInquiry(payload: InquiryPayload) {
+  const response = await fetch(`${API_BASE_URL}/inquiries/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail || "Unable to send inquiry. Please check the form and try again.");
+  }
+
+  return response.json();
 }
 
 async function fetchList<T>(path: string): Promise<T[]> {
